@@ -2,14 +2,13 @@ const http = require('http');
 const url = require('url');
 
 let books = [
-    {id: 1, title: "The Silent Patient", genre: "Crime/Suspense"},
-    {id: 2, title: "Verity", genre: "Crime/Thriller"}
+    {id: '1', title: "The Silent Patient", genre: "Crime/Suspense"},
+    {id: '2', title: "Verity", genre: "Crime/Thriller"}
 ];
 
 const requesthandler = (request, response) => {
-    const { method } = request;
-    const parsedUrl = url.parse(request.url, true);
-    const parts = parsedUrl.pathname.split('/');
+    const { method , url} = request;
+    const parts = url.split('/');
 
     console.log(parts); 
 
@@ -17,14 +16,14 @@ const requesthandler = (request, response) => {
         response.writeHead(200, {"Content-Type": "text/plain"});
         response.end("Hey, welcome");
     } 
-    else if (method === "GET" && parts[1] === "books") {
+    else if (method === "GET" && url === "/books") {
         response.writeHead(200, {"Content-Type": "application/json"});
         response.end(JSON.stringify(books));
     } 
     else if (method === "GET" && parts[1] === "books" && parts[2]) {
-        const id = Number(parts[2]); 
+        const id = parts[2]; 
         const book = books.find((book) => book.id === id); 
-
+        console.log(book);
         if (book) {
             response.writeHead(200, {"Content-Type": "application/json"});
             response.end(JSON.stringify(book));
